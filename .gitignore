@@ -4,3 +4,9 @@ __pycache__/
 .DS_Store
 Results/
 data/
+
+# Local one-off maintenance/debug utilities
+nuke_errors.py
+fix_gpu_setup.py
+GPU_TROUBLESHOOTING.md
+
