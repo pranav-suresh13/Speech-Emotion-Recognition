@@ -2,8 +2,18 @@ venv/
 __pycache__/
 *.pyc
 .DS_Store
-Results/
+
+# Large datasets (tracked in Google Drive, not Git)
 data/
+
+# Model weights & artifacts (hosted externally on Google Drive)
+*.pth
+*.joblib
+*.pkl
+
+# Jupyter notebook cache
+.ipynb_checkpoints/
+*.ipynb_checkpoints
 
 # Local one-off maintenance/debug utilities
 nuke_errors.py
