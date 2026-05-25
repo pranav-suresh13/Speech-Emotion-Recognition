@@ -1,9 +1,29 @@
-librosa
+# Core Data Processing
 numpy
 pandas
+scipy
+joblib
+
+# Audio Processing
+librosa
+soundfile
+
+# Deep Learning & Pre-trained Models
+torch
+torchaudio
+transformers
+safetensors
+tokenizers
+
+# Machine Learning & Metrics
 scikit-learn
+
+# NLP / Text
+nltk
+nlpaug
+vaderSentiment
+
+# Visualization
 matplotlib
 seaborn
-torch
-torchvision
-torchaudio
+
