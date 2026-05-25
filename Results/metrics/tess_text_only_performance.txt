@@ -1,0 +1,19 @@
+=== TESS TEXT-ONLY EVALUATION RESULTS ===
+Checkpoint    : tess_text_model_OAF.joblib
+Train speaker : OAF
+Test speaker  : YAF
+Test accuracy : 0.1429
+
+              precision    recall  f1-score   support
+
+       angry       0.14      0.04      0.06       200
+     disgust       0.14      0.32      0.20       200
+        fear       0.14      0.01      0.03       200
+       happy       0.14      0.04      0.06       200
+     neutral       0.14      0.21      0.17       200
+         sad       0.14      0.24      0.18       200
+    surprise       0.14      0.14      0.14       200
+
+    accuracy                           0.14      1400
+   macro avg       0.14      0.14      0.12      1400
+weighted avg       0.14      0.14      0.12      1400

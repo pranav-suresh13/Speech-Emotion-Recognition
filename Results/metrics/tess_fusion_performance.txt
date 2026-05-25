@@ -1,0 +1,20 @@
+=== TESS FUSION MODEL — TEST RESULTS ===
+Architecture: MFCCs->BiGRU + TF-IDF/LogReg -> Late Fusion
+
+Audio-only Accuracy : 99.29%
+Text-only  Accuracy : 13.93%
+Fusion     Accuracy : 99.29%
+
+              precision    recall  f1-score   support
+
+       angry     1.0000    1.0000    1.0000        80
+     disgust     1.0000    1.0000    1.0000        80
+        fear     1.0000    0.9750    0.9873        80
+       happy     1.0000    0.9875    0.9937        80
+     neutral     0.9877    1.0000    0.9938        80
+         sad     1.0000    0.9875    0.9937        80
+    surprise     0.9639    1.0000    0.9816        80
+
+    accuracy                         0.9929       560
+   macro avg     0.9931    0.9929    0.9929       560
+weighted avg     0.9931    0.9929    0.9929       560

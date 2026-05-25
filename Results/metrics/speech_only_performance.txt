@@ -1,0 +1,16 @@
+=== CUSTOM MFCC + BiGRU SPEECH MODEL RESULTS ===
+Dataset: TESS Toronto Emotional Speech Set (Mixed Split)
+
+              precision    recall  f1-score   support
+
+       angry       1.00      1.00      1.00        80
+     disgust       1.00      1.00      1.00        80
+        fear       1.00      0.97      0.99        80
+       happy       1.00      0.99      0.99        80
+     neutral       0.99      1.00      0.99        80
+         sad       1.00      0.99      0.99        80
+    surprise       0.96      1.00      0.98        80
+
+    accuracy                           0.99       560
+   macro avg       0.99      0.99      0.99       560
+weighted avg       0.99      0.99      0.99       560
