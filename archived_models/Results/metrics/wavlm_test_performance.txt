@@ -1,0 +1,15 @@
+=== WAVLM TEST SET RESULTS (Random Split) ===
+
+              precision    recall  f1-score   support
+
+       angry       0.96      0.54      0.69        80
+     disgust       0.98      0.75      0.85        80
+        fear       0.62      1.00      0.77        80
+       happy       0.75      0.84      0.79        80
+     neutral       0.95      1.00      0.98        80
+         sad       0.95      0.95      0.95        80
+    surprise       0.86      0.79      0.82        80
+
+    accuracy                           0.84       560
+   macro avg       0.87      0.84      0.84       560
+weighted avg       0.87      0.84      0.84       560

@@ -1,0 +1,17 @@
+=== BiGRU TEXT-ONLY MODEL RESULTS ===
+Architecture : Embedding(200) -> BiGRU(256) -> Attention -> Dropout(0.15) -> Linear(512,7)
+Overall Accuracy : 39.85%
+
+              precision    recall  f1-score   support
+
+       angry     0.2291    0.2696    0.2477       345
+     disgust     0.1277    0.0882    0.1043        68
+        fear     0.0581    0.1000    0.0735        50
+       happy     0.3235    0.4353    0.3712       402
+     neutral     0.6042    0.4594    0.5219      1256
+         sad     0.2304    0.2115    0.2206       208
+    surprise     0.3646    0.4982    0.4211       281
+
+    accuracy                         0.3985      2610
+   macro avg     0.2768    0.2946    0.2800      2610
+weighted avg     0.4329    0.3985    0.4081      2610
