@@ -28,6 +28,7 @@ from sklearn.metrics import (
     confusion_matrix,
     f1_score,
 )
+from sklearn.manifold import TSNE
 
 warnings.filterwarnings("ignore")
 
@@ -160,6 +161,31 @@ def plot_f1_per_class(y_true, y_pred, labels: list[str], save_path: Path, title:
     plt.close()
     print(f"  Saved per-class F1 plot → {save_path.name}")
 
+def plot_tsne(features: np.ndarray, labels: list[str], emotion_names: list[str], save_path: Path, title: str) -> None:
+    print(f"  Generating t-SNE plot (this may take a moment)...")
+    # Using a small perplexity because cluster sizes might be small
+    tsne = TSNE(n_components=2, random_state=42, init='pca', learning_rate='auto', perplexity=min(30, len(labels)-1))
+    x_2d = tsne.fit_transform(features)
+    
+    plt.figure(figsize=(10, 7))
+    sns.scatterplot(
+        x=x_2d[:, 0], y=x_2d[:, 1],
+        hue=labels,
+        hue_order=emotion_names,
+        palette="husl",
+        alpha=0.8,
+        s=60,
+        edgecolor="w",
+        linewidth=0.5
+    )
+    plt.title(title)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', title="Emotions")
+    plt.grid(alpha=0.2)
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150)
+    plt.close()
+    print(f"  Saved t-SNE graph → {save_path.name}")
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -259,6 +285,17 @@ def main() -> None:
         labels=present_labels,
         save_path=RESULTS_PLOTS_DIR / "tess_text_f1_per_class.png",
         title=f"TESS Text — Per-class F1 Score\n(Train={train_speaker} → Test={test_speaker})",
+    )
+
+    # -----------------------------------------------------------------------
+    # Generate t-SNE Plot in Results/plots
+    # -----------------------------------------------------------------------
+    plot_tsne(
+        x_test,
+        true_labels,
+        emotion_names=present_labels,
+        save_path=RESULTS_PLOTS_DIR / "tess_text_tsne_visualization.png",
+        title=f"TESS Text Features — t-SNE Visualization\n(Test Data: {test_speaker} Speaker)",
     )
 
     print("\n  ✓ All test outputs saved successfully.\n")
