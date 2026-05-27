@@ -18,27 +18,27 @@ https://drive.google.com/drive/folders/16SWmrJ-QVp3ogzqmuLv9SByIkySN3pQL?usp=sha
 
 ### MELD (Multimodal EmotionLines Dataset)
 
-|      Property    |                                             Details                                          |
-|------------------|----------------------------------------------------------------------------------------------|
-| **Modality**     | Text-based (transcripts from TV show Friends)                                                |
-| **Emotions**     | 7 classes: Anger, Disgust, Fear, Joy, Neutral, Sadness, Surprise                             |
-| **Files**        | `train_sent_emo.csv` (training), `dev_sent_emo.csv` (validation), `test_sent_emo.csv` (test) |
-| **Splits**       | Train (7,215 samples), Dev (2,406 samples), Test (4,040 samples)                             |
-| **Preprocessed** | `train_sent_emo_balanced.csv` (augmented training set)                                       |
-| **Use Case**     | Training alternative text models (DistilBERT, BiGRU)                                         |
-| **Location**     | `data/MELD/` |
+| Property | Details |
+| :--- | :--- |
+| **Modality** | Text-based (transcripts from TV show Friends) |
+| **Emotions** | 7 classes: Anger, Disgust, Fear, Joy, Neutral, Sadness, Surprise |
+| **Files** | `train_sent_emo.csv`, `dev_sent_emo.csv`, `test_sent_emo.csv` |
+| **Splits** | Train (7,215), Dev (2,406), Test (4,040) samples |
+| **Preprocessed** | `train_sent_emo_balanced.csv` (augmented training set) |
+| **Use Case** | Training alternative text models (DistilBERT, BiGRU) |
+| **Location** | `data/MELD/` |
 
 ### TESS (Toronto Emotional Speech Set)
 
-|       Property    |                          Details                                                 |
-|-------------------| ---------------------------------------------------------------------------------|
-| **Modality**      | Audio (WAV files) with transcripts                                               |
-| **Emotions**      | 7 emotions: Anger, Disgust, Fear, Happiness, Neutral, Pleasant Surprise, Sadness |
-| **Speakers**      | 2 actors (OAF - Older Adult Female, YAF - Young Adult Female)                    |
-| **Total Samples** | 2,800 audio files (200 files per emotion per speaker)                            |
-| **Preprocessed**  | Auto-generated `tess_manifest.csv` (maps files to emotion labels)                |
-| **Use Cases**     | Training all production models (MFCC+MLP, TF-IDF+LR, Late Fusion)                |
-| **Location**      | `data/TESS Toronto emotional speech set data/` (with emotion subdirectories)     |
+| Property | Details |
+| :--- | :--- |
+| **Modality** | Audio (WAV files) with transcripts |
+| **Emotions** | 7 emotions: Anger, Disgust, Fear, Happiness, Neutral, Pleasant Surprise, Sadness |
+| **Speakers** | 2 actors (OAF - Older Adult Female, YAF - Young Adult Female) |
+| **Total Samples** | 2,800 audio files (200 files per emotion per speaker) |
+| **Preprocessed** | Auto-generated `tess_manifest.csv` (maps files to emotion labels) |
+| **Use Cases** | Training all production models (MFCC+BiGRU, TF-IDF+LR, Late Fusion) |
+| **Location** | `data/TESS Toronto emotional speech set data/` |
 
 ## Emotion Classes
 
@@ -59,8 +59,8 @@ This project recognizes **7 emotion categories** across all datasets:
 ### Speech Pipeline
 Acoustic emotion recognition models trained on the TESS (Toronto Emotional Speech Set) dataset.
 
-- **MFCC + MLP (Baseline)**: A Multi-Layer Perceptron trained on MFCC (Mel-Frequency Cepstral Coefficients) features. 
-  - **Model Type**: Feed-forward Neural Network
+- **MFCC + BiGRU**: A Bidirectional GRU trained on MFCC (Mel-Frequency Cepstral Coefficients) features. 
+  - **Model Type**: Recurrent Neural Network (BiGRU)
   - **Dataset**: TESS
   - **Location**: `models/speech_pipeline/speech_only_model.pth` (production)
 
@@ -97,14 +97,14 @@ Late-fusion multimodal system combining audio and text predictions.
 
 ### Model Files Reference
 
-| Pipeline | Model | Training Script | Test Script | Weights | Status |
-|----------|-------|-----------------|-------------|---------|--------|
-| Speech | MFCC + MLP | `train.py` | `test.py` | `speech_only_model.pth` | ✓ Production |
-| Speech | WavLM | `train_wavlm.py` | `test_wavlm.py` | `wavlm_random_split.pth` | Archived |
-| Text | DistilBERT | `train_bert.py` | `test_bert.py` | `bert_model.pth` | Archived |
-| Text | TF-IDF + LR | `train.py` | `test.py` | `tess_text_model_OAF.joblib` | ✓ Production |
-| Text | BiGRU | `train_bigru.py` | `test_bigru.py` | `text_bigru_model.pth` | Archived |
-| Fusion | Late Fusion MLP | `train.py` | `test.py` | `tess_fusion_model.pth` | ✓ Production |
+| Pipeline | Model | Training Script | Test Script | Weights | Dataset | Status |
+|----------|-------|-----------------|-------------|---------|---------|--------|
+| Speech | MFCC + BiGRU | `train.py` | `test.py` | `speech_only_model.pth` | TESS | ✓ Production |
+| Speech | WavLM | `train_wavlm.py` | `test_wavlm.py` | `wavlm_random_split.pth` | TESS | Archived |
+| Text | DistilBERT | `train_bert.py` | `test_bert.py` | `bert_model.pth` | MELD | Archived |
+| Text | TF-IDF + LR | `train.py` | `test.py` | `tess_text_model_OAF.joblib` | TESS | ✓ Production |
+| Text | BiGRU | `train_bigru.py` | `test_bigru.py` | `text_bigru_model.pth` | MELD | Archived |
+| Fusion | Late Fusion MLP | `train.py` | `test.py` | `tess_fusion_model.pth` | TESS | ✓ Production |
 
 **Important:** Production models are in `models/` folder. Archived models are in `archived_models/` folder. Scripts in both locations have matching names but different paths. 
 
@@ -113,7 +113,7 @@ Late-fusion multimodal system combining audio and text predictions.
 These supporting files must be present alongside the model weights for proper inference:
 
 **Speech Pipeline**
-- MFCC + MLP(production): No additional artifacts required (weights only)
+- MFCC + BiGRU (production): No additional artifacts required (weights only)
 - WavLM: No additional artifacts required (weights only)
 
 **Text Pipeline**
@@ -166,7 +166,7 @@ project/
 │   │   ├── fusion_label_encoder.pkl
 │   │   ├── test.py
 │   │   └── train.py
-│   ├── speech_pipeline/              # MFCC + MLP speech model on TESS
+│   ├── speech_pipeline/              # MFCC + BiGRU speech model on TESS
 │   │   ├── speech_only_model.pth
 │   │   ├── test.py
 │   │   └── train.py
@@ -249,7 +249,7 @@ pip install -r requirements.txt
 
 #### Speech Pipeline
 
-To evaluate the MFCC + MLP speech model on TESS:
+To evaluate the MFCC + BiGRU speech model on TESS:
 
 ```bash
 python models/speech_pipeline/test.py
@@ -291,15 +291,22 @@ python archived_models/text_pipeline/test_bigru.py
 ## Results & Metrics
 
 The following table outlines the training and testing accuracies across all six models evaluated in this project. Full classification reports, confusion matrices, and loss curves can be found in the `Results/` folder.
-
+  
 |Pipeline |       Model       |Training Accuracy | Testing Accuracy |
 |---------|-------------------|------------------|------------------|
-|Speech   |MFCC+MLP(Baseline) |     99.52%       |    99.29%        |
+|Speech   |MFCC+BiGRU         |     99.52%       |    99.29%        |
 |Speech   |WavLM              |     79.46%       |    85.71%        |
 |Text     |TF-IDF+LR(Baseline)|     72.33%       |    14.29%        |
 |Text     |BiGRU              |     79.65%       |    39.85%        |
 |Text     |DistilBERT         |     66.89%       |    58.28%        |
 |Fusion   |Late Fusion MLP    |     99.64%       |    99.29%        |
+
+### Key Observations
+1. **Dominance of Speech Acoustics:** MFCC+BiGRU and Fusion both achieved ~99% accuracy, demonstrating that speech acoustic features (prosody, tone, frequency) are the primary emotional carriers in the TESS dataset.
+2. **Lexical Overfitting in Classical ML:** TF-IDF+LR showed a massive performance gap (72% train vs 14% test). This indicates the model memorized specific words in the training set which do not reliably correlate with emotions in these simple, repetitive transcripts.
+3. **Efficiency of Handcrafted Features:** MFCC+BiGRU significantly outperformed WavLM. This suggests that for specialized datasets like TESS, traditional feature engineering (MFCCs) paired with recurrent architectures (BiGRU) can be more effective than large, general-purpose transformer models.
+4. **Modality Performance Gap:** There is a stark contrast between speech (>99%) and text (~58% best) accuracy. This highlights that "what" is said in these recordings is far less informative for emotion recognition than "how" it is said.
+5. **Robustness of Late Fusion:** The Late Fusion MLP successfully maintained the high accuracy of the speech pipeline (99.29%) without being degraded by the lower-performing text modality, proving the system's ability to prioritize the most reliable signal.
 
 Note: For models that save the best checkpoint using validation/dev accuracy (e.g., BiGRU, DistilBERT), the training accuracy shown is taken from that best-checkpoint epoch, not the final logged epoch.
 
@@ -308,7 +315,7 @@ Note: For models that save the best checkpoint using validation/dev accuracy (e.
 - **Project Structure**: This repository implements the multimodal fusion architecture as specified in the project PDF. The three core models are stored in `models/` and follow the PDF requirements.
 
 - **Production vs. Archived Models**: 
-  - **Production models** (in `models/`): MFCC+MLP speech, TF-IDF+LR text, and Late Fusion MLP
+  - **Production models** (in `models/`): MFCC+BiGRU speech, TF-IDF+LR text, and Late Fusion MLP
   - **Archived/Alternative models** (in `archived_models/`): WavLM, DistilBERT, BiGRU, and experimental variants
 
 - **Results Organization**:
