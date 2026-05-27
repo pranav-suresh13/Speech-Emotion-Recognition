@@ -93,25 +93,34 @@ class BERTEmotionDataset(Dataset):
 class BERTEmotionClassifier(nn.Module):
     def __init__(self, num_classes: int = 7):
         super().__init__()
-        self.bert = DistilBertModel.from_pretrained('distilbert-base-uncased')
- 
+        self.bert = DistilBertModel.from_pretrained('distilbert-base-uncased', output_attentions=True)
+
         # Freeze everything first, then unfreeze last 2 transformer blocks
         for param in self.bert.parameters():
             param.requires_grad = False
         for layer in self.bert.transformer.layer[-2:]:
             for param in layer.parameters():
                 param.requires_grad = True
- 
+
         # Dropout 0.2
         self.dropout = nn.Dropout(0.2)
         self.fc = nn.Linear(self.bert.config.hidden_size, num_classes)
- 
-    def forward(self, input_ids, attention_mask):
+
+    def forward(self, input_ids, attention_mask, return_attention=False):
         out = self.bert(input_ids=input_ids, attention_mask=attention_mask)
         cls = out.last_hidden_state[:, 0, :]   # [CLS] token
-        return self.fc(self.dropout(cls))
- 
- 
+        logits = self.fc(self.dropout(cls))
+        
+        if return_attention:
+            # out.attentions contains attention weights from all 6 layers
+            # Average across all layers and heads for visualization
+            attentions = torch.stack(out.attentions)  # [num_layers, batch_size, num_heads, seq_len, seq_len]
+            avg_attention = attentions.mean(dim=(0, 2))  # Average over layers and heads: [batch_size, seq_len, seq_len]
+            return logits, avg_attention
+        
+        return logits
+
+
 # ── Training ──────────────────────────────────────────────────────────────────
 def train_bert_pipeline() -> None:
     os.makedirs(MODELS_DIR, exist_ok=True)
